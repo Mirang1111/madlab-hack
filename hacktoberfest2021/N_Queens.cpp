@@ -1,55 +1,68 @@
 #include<bits/stdc++.h>
 using namespace std;
-bool issafe(int** arr,int x,int y,int n){
-	for(int row=0;row<x;row++){
-		if(arr[row][y]==1) return false;
-	}
-	int row=x;
-	int col=y;
-	while(row>=0 && col>=0){
-		if(arr[row][col]==1) return false;
-		row--;
-		col--;
-	}
-	row=x;
-	col=y;
-	while(row>=0 && col<n){
-		if(arr[row][col]==1) return false;
-		row--;
-		col++;
-	}
-	return true;
+bool queensafe(int n , int row  , int col , int arr[][10])
+{
+    for(int i = row-1 , j = col ; i>=0 ; i--)
+    {
+        if(arr[i][j]==1)
+        {
+            return false;
+        }
+    }
+    for(int i = row-1 , j = col -1 ; i>=0 && j>=0 ; i-- , j--)
+    {
+        if(arr[i][j]==1)
+        {
+            return false;
+        }
+    }
+    for(int i = row-1 , j = col + 1 ; i>= 0 && j<n ; i-- , j++)
+    {
+        if(arr[i][j]==1)
+        {
+            return false;
+        }
+    }
+    return true;
+    
 }
-bool nqueen(int** arr,int x,int n){
-	if(x>=n){
-		return true;
-	}
-	for(int col=0;col<n;col++){
-		if(issafe(arr,x,col,n)){
-			arr[x][col]=1;
-			if(nqueen(arr,x+1,n)) return true;
-			arr[x][col]=0; // BACKTRACKING
-		}
-	}
-	return false;
+void solve(int n , int row , int arr[][10])
+{
+     if(row==n)
+        {
+            for(int i = 0 ; i<n;i++)
+            {
+                for(int j = 0 ; j<n ; j++)
+                {
+                    if(arr[i][j]==1)
+                    {
+                        cout<<"Q ";
+                    }
+                    else
+                    {
+                        cout<<"_ ";
+                    }
+                }
+                cout<<endl;
+            }
+            cout<<endl;
+            return ;
+        }
+    for(int col = 0 ; col < n; col++)
+    {
+        if(queensafe(n,row,col,arr)==true)
+        {
+        arr[row][col] = 1;
+        solve(n,row+1,arr);
+        arr[row][col] = 0;
+        }
+    }
 }
-int main(){
-	int n;
-	cin>>n;
-	int** arr=new int*[n];
-	for(int i=0;i<n;i++){
-		arr[i]=new int[n];
-		for(int j=0;j<n;j++){
-			arr[i][j]=0;
-		}
-	}
-	if(nqueen(arr,0,n)){
-		for(int i=0;i<n;i++){
-			for(int j=0;j<n;j++){
-				cout<<arr[i][j]<<" ";
-			}
-			cout<<"\n";
-		}	
-	}
-	return 0;
+int main()
+{
+    int n;
+    cin>>n;
+    int arr[10][10];
+    solve(n,0,arr);
+    
 }
