@@ -1,27 +1,29 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
-long staircase(int n)
+int countWaysUtil(int n, int m)
 {
-	//Write your code here
-    long a[n+1];
-    if(n<=1)
-        return 1;
-    else if(n==2)
-        return 2;
-    else if(n==3)
-        return 4;
-    a[0]=1;
-    a[1]=1;
-    a[2]=2;
-    a[3]=4;
-    for(int i=4;i<=n;i++){
-        a[i]=a[i-1]+a[i-2]+a[i-3];
+    if (n <= 1)
+    {
+        return n;
     }
-    return a[n];
+     
+    int res = 0;
+    for(int i = 1; i <= m && i <= n; i++)
+    {
+       res += countWaysUtil(n - i, m);
+    }
+    return res;
 }
+int countWays(int s, int m)
+{
+    return countWaysUtil(s + 1, m);
+}
+ 
 int main()
 {
-	int n;
-	cin >> n;
-	cout << staircase(n);
+    int s = 4, m = 2;
+    cout << "Number of ways = " << countWays(s, m);
+ 
+    return 0;
 }
+ 
