@@ -1,27 +1,30 @@
 #include<bits/stdc++.h>
 using namespace std;
-int dp[100][100];  // dp array
+int dp[100][100];  // memoization
 int k(int wt[] , int val[] , int W , int n)
 {
-	for(int i = 0 ; i<n+1;i++)
-	{
-		for(int j = 0 ; j<W+1;j++)
-		{
-			if(i==0 || j==0)       // base condition in recursion == initialization in the tabulation method
-			{
-				dp[i][j] = 0;
-			}
-			else if(wt[i-1]<=j)   // condition same as recursion , just replace n , W with i , j
-			{
-				dp[i][j] = max(val[i-1] + dp[i-1][j - wt[i-1]] , dp[i-1][j]);
-			}
-			else if(wt[i-1] > j)
-			{
-				dp[i][j] = dp[i-1][j];
-			}
-		}
+	if(W==0||n==0) // if W==0 , no capacity to store items is there , therefore the profit is zero
+	{              // if n==0 , no items are there , therefore the profit is zero
+		return 0;
 	}
-	return dp[n][W];
+	if(dp[n][W]!=-1)
+	{
+		return dp[n][W];
+	}
+	if(wt[n-1]<=W)
+	{
+		int item_taken = val[n-1] + k(wt,val,W-wt[n-1],n-1);
+		int not_taken = k(wt,val,W,n-1);
+		int c = max(item_taken , not_taken); 
+		dp[n][W] = c;
+		return c;	
+	}
+	else if(wt[n-1]>W)
+	{
+		int no = k(wt,val,W,n-1);
+		dp[n][W] = no;
+		return no;
+	}
 }
 int main()
 {
@@ -39,6 +42,7 @@ int main()
 	}
 	int W;
 	cin>>W;
+	memset(dp,-1,sizeof(dp));
 	int c = k(wt,val,W,n);
 	cout<<"The maximum profit obtained in the 0/1 knapsack problem is "<<c;
 	return 0;
