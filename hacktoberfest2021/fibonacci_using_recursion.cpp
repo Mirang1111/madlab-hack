@@ -8,8 +8,8 @@ Task:
 
 int recursion(int n)
 {
-    if (n <= 1)
-        return 1;
+    if (n ==1 || n==0)
+        return n;
     return recursion(n - 1) + recursion(n - 2);
 }
 int main()
